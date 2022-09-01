@@ -17,13 +17,15 @@
     "date-fns": "^2.29.2",
     "ts-mocha": "^10.0.0",
     "vue": "^2.6.11",
-    "vue-chart.js": "^0.2.0",
+    "chart.js": "^2.7.1",
+    "vue-chartjs": "^3.4.0",
     "vue-i18n": "^8.26.3",
     "vue-router": "^3.2.0",
     "vuetify": "^2.6.0",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.34",
     "@types/chai": "^4.2.11",
     "@types/expect": "^24.3.0",
     "@types/mocha": "^5.2.7",
