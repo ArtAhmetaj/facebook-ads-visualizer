@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "ts-mocha --paths -p tsconfig.testing.json tests/unit/**/*.unit.ts",
+    "test:component": "vue-cli-service test:unit tests/component/**/*.spec.ts",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
@@ -14,6 +15,7 @@
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "date-fns": "^2.29.2",
+    "ts-mocha": "^10.0.0",
     "vue": "^2.6.11",
     "vue-chart.js": "^0.2.0",
     "vue-i18n": "^8.26.3",
@@ -23,7 +25,8 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
-    "@types/mocha": "^5.2.4",
+    "@types/expect": "^24.3.0",
+    "@types/mocha": "^5.2.7",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.13",
