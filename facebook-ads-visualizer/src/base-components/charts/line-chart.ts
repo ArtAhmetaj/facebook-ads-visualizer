@@ -14,7 +14,7 @@ export default Vue.extend({
     return new (class {
       options: ChartOptions = {
         legend: {
-          display: false,
+          display: true,
         },
         responsive: true,
         layout: {
@@ -27,6 +27,7 @@ export default Vue.extend({
           fontSize: 26,
           fontColor: "#00295B",
         },
+
       };
     })();
   },

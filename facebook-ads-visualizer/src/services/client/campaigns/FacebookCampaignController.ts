@@ -49,9 +49,10 @@ export class FacebookCampaignController implements CampaignController {
           },
           access_token: process.env.VUE_APP_FACEBOOK_TOKEN
         },
+        //TODO: push to base instance
         paramsSerializer: (query) => {
           return Object.entries(query)
-            .map(([key, value], i) => {
+            .map(([key, value]) => {
               if (Array.isArray(value))
                 return `${key}=${value.join("&" + key + "=")}`;
               if (value instanceof Object)
@@ -75,5 +76,5 @@ export class FacebookCampaignController implements CampaignController {
     }
   }
 }
-console.log(facebookCampaignInstance.interceptors);
+
 export default new FacebookCampaignController(facebookCampaignInstance);

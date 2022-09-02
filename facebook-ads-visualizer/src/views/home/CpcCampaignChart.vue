@@ -1,11 +1,15 @@
 <template>
-  <LineChart title-input="CPC on all campaigns per week" :chart-data="this.getChartData"></LineChart>
+  <LineChart
+    :title-input="this.chartTitle"
+    :chart-data="this.chartData"
+  ></LineChart>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import LineChart from "@/base-components/charts/line-chart";
 import { ChartData } from "chart.js";
+import divideLabelIfMultiLine from "@/utils/chart-utils";
 
 export default Vue.extend({
   name: "CpcCampaignChart",
@@ -14,31 +18,47 @@ export default Vue.extend({
   },
 
   props: {
+    dates: {
+      type: Array,
+      required: true
+    },
     xAxis: {
-      type: Object as () => string[],
+      type: Array,
       required: true
     },
     yAxis: {
-      type: Object as () => number[],
+      type: Array,
       required: true
     }
   },
   computed: {
-    getChartData(): ChartData {
+    chartData(): ChartData {
       return {
-        labels: this.xAxis,
+        labels: (this.xAxis as string[]).map(divideLabelIfMultiLine),
 
         datasets: [
           {
-            fill: false,
-            label: "",
-            borderColor: "red",
-            data: this.yAxis
+            backgroundColor: "rgb(255, 99, 132, 0.5)",
+            borderColor: "rgb(255, 99, 132)",
+            borderWidth: 2,
+            fill: true,
+            label: "Cost per Click",
+            data: this.yAxis as number[]
           }
+
         ]
       };
+    },
+
+    chartTitle(): string {
+      //TODO: can create a seperate model here
+      const dates = this.dates as Array<Date>;
+      return `Campaign statistics from ${dates[0].toLocaleDateString(
+        this.$i18n.locale
+      )} to ${dates[1].toLocaleDateString(this.$i18n.locale)}`;
     }
   }
+
 });
 </script>
 

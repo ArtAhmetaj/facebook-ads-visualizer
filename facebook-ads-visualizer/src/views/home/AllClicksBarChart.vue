@@ -1,7 +1,7 @@
 <template>
   <BarChart
     title-input="All clicks on campaign per week"
-    :chart-data="this.getChartData"
+    :chart-data="this.chartData"
   ></BarChart>
 </template>
 
@@ -27,7 +27,7 @@ export default Vue.extend({
     },
   },
   computed: {
-    getChartData(): ChartData {
+    chartData(): ChartData {
       return {
         labels: this.xAxis,
 

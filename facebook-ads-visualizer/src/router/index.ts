@@ -7,13 +7,17 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
-  },
+    name: "Homepage",
+    component: Home
+  }
 ];
 
 const router = new VueRouter({
-  routes,
+  routes
 });
 
+router.beforeEach((to, from, next) => {
+  document.title= to.name ?? "Causalytics ";
+  next();
+});
 export default router;

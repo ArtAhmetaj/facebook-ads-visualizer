@@ -1,9 +1,13 @@
 <template>
   <v-container fluid class="main-container">
-    <v-row> </v-row>
-    <v-row justify="center" align-content="center">
+
+    <v-row class="pt-5" justify="center" align-content="center">
       <v-col cols="12">
-        <CpcCampaignChart x-axis="" y-axis=""></CpcCampaignChart>
+        <CpcCampaignChart
+          :dates="this.rangeDates"
+          :x-axis="this.xAxis"
+          :y-axis="this.yAxis"
+        ></CpcCampaignChart>
       </v-col>
     </v-row>
   </v-container>
@@ -13,6 +17,7 @@
 import Vue from "vue";
 import faceBookCampaignController from "@/services/client/campaigns/FacebookCampaignController";
 import CpcCampaignChart from "@/views/home/CpcCampaignChart.vue";
+import dateService from "@/services/date/FnsDateService";
 
 export default Vue.extend({
   name: "Home",
@@ -20,16 +25,27 @@ export default Vue.extend({
     CpcCampaignChart,
   },
   data() {
-    return new (class {})();
+    return new (class {
+      rangeDates: Array<Date> = [
+        dateService.subDurationOnDate(new Date(), { years: 1 }),
+        new Date(),
+      ];
+      xAxis: Array<string> = [];
+      yAxis: Array<number> = [];
+    })();
   },
 
-  mounted() {
-    const data = faceBookCampaignController.getAllCampaignsByRange(
-      new Date(),
-      new Date()
-    );
+  async mounted() {
+    const campaignResponse =
+      await faceBookCampaignController.getAllCampaignsByRange(
+        this.rangeDates[0],
+        this.rangeDates[1]
+      );
 
-    // const xAxis =
+    this.xAxis = campaignResponse.data.map((e) => e.campaign_name);
+    this.yAxis = campaignResponse.data
+      .map((e) => e.cpc)
+      .map((e) => parseFloat(e));
   },
 
   methods: {},
