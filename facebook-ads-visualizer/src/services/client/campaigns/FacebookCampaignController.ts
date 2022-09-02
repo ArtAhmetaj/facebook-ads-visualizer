@@ -1,10 +1,11 @@
 import CampaignController from "@/services/client/campaigns/campaign-controller";
 import CampaignResponse, {
-  campaignFields,
+  campaignFields
 } from "@/services/client/campaigns/campaign-response";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 import facebookCampaignInstance from "@/services/client/campaigns/campain-axios-instance";
 import FacebookApiException from "@/services/client/campaigns/FacebookApiException";
+import destructureObjectForQueryparameter from "@/utils/http-req-res-utils";
 
 export class FacebookCampaignController implements CampaignController {
   private axios: AxiosInstance;
@@ -19,7 +20,7 @@ export class FacebookCampaignController implements CampaignController {
       "campaign_id",
       "campaign_name",
       "impressions",
-      "cpc",
+      "cpc"
     ]
   ): Promise<CampaignResponse> {
     throw new Error("not Implemented");
@@ -32,20 +33,36 @@ export class FacebookCampaignController implements CampaignController {
       "campaign_id",
       "campaign_name",
       "impressions",
-      "cpc",
+      "cpc"
     ]
   ): Promise<CampaignResponse> {
     try {
       const axiosRequestArgs: AxiosRequestConfig = {
-        url: "/act_25064918/insights",
+        url:
+          facebookCampaignInstance.defaults.baseURL + "/act_25064918/insights",
         params: {
           fields: fields.join(","),
           level: "campaign",
           time_range: {
-            since: startDate.toLocaleDateString(),
-            until: endDate.toLocaleDateString(),
+            since: startDate.toLocaleDateString("en-CA"),
+            until: endDate.toLocaleDateString("en-CA")
           },
+          access_token: process.env.VUE_APP_FACEBOOK_TOKEN
         },
+        paramsSerializer: (query) => {
+          return Object.entries(query)
+            .map(([key, value], i) => {
+              if (Array.isArray(value))
+                return `${key}=${value.join("&" + key + "=")}`;
+              if (value instanceof Object)
+                return destructureObjectForQueryparameter(
+                  value as Record<string, string>,
+                  key
+                );
+              return `${key}=${value}`;
+            })
+            .join("&");
+        }
       };
       const result = await axios.request(axiosRequestArgs);
       return result.data;
@@ -58,5 +75,5 @@ export class FacebookCampaignController implements CampaignController {
     }
   }
 }
-
+console.log(facebookCampaignInstance.interceptors);
 export default new FacebookCampaignController(facebookCampaignInstance);
