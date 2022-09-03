@@ -8,45 +8,53 @@
 <script lang="ts">
 import Vue from "vue";
 import LineChart from "@/base-components/charts/line-chart";
-import { ChartData } from "chart.js";
-import divideLabelIfMultiLine from "@/utils/chart-utils";
+import { ChartData, ChartDataSets } from "chart.js";
+import getRandomColor from "../../../tests/unit/utils/color-utils.unit";
 
 export default Vue.extend({
   name: "CpcCampaignChart",
   components: {
-    LineChart
+    LineChart,
   },
 
   props: {
     dates: {
       type: Array,
-      required: true
+      required: true,
     },
     xAxis: {
       type: Array,
-      required: true
+      required: true,
     },
     yAxis: {
-      type: Array,
-      required: true
-    }
+      type: Object as () => Record<string, number[]>,
+      required: true,
+    },
+  },
+
+  methods: {
+    getMappedChartYAxisFromDate(): ChartDataSets[] {
+      const results = [];
+      for (const campaign in this.yAxis) {
+        const randomColor = getRandomColor();
+        results.push({
+          borderColor: randomColor,
+          borderWidth: 2,
+          pointHoverBackgroundColor: "red",
+          fill: true,
+          label: campaign,
+          data: this.yAxis[campaign],
+        });
+      }
+      return results;
+    },
   },
   computed: {
     chartData(): ChartData {
       return {
-        labels: (this.xAxis as string[]).map(divideLabelIfMultiLine),
+        labels: (this.xAxis as string[]).map((v, i) => `${i + 1}W`),
 
-        datasets: [
-          {
-            backgroundColor: "rgb(255, 99, 132, 0.5)",
-            borderColor: "rgb(255, 99, 132)",
-            borderWidth: 2,
-            fill: true,
-            label: "Cost per Click",
-            data: this.yAxis as number[]
-          }
-
-        ]
+        datasets: this.getMappedChartYAxisFromDate(),
       };
     },
 
@@ -56,9 +64,8 @@ export default Vue.extend({
       return `Campaign statistics from ${dates[0].toLocaleDateString(
         this.$i18n.locale
       )} to ${dates[1].toLocaleDateString(this.$i18n.locale)}`;
-    }
-  }
-
+    },
+  },
 });
 </script>
 

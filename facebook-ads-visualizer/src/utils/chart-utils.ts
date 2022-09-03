@@ -1,4 +1,4 @@
-export default function divideLabelIfMultiLine(
+export  function divideLabelIfMultiLine(
   text: string
 ): string[] | string {
   const splitText = text.split(/\s+/g);

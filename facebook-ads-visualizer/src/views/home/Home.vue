@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="main-container">
-
     <v-row class="pt-5" justify="center" align-content="center">
       <v-col cols="12">
         <CpcCampaignChart
@@ -17,7 +16,11 @@
 import Vue from "vue";
 import faceBookCampaignController from "@/services/client/campaigns/FacebookCampaignController";
 import CpcCampaignChart from "@/views/home/CpcCampaignChart.vue";
-import dateService from "@/services/date/FnsDateService";
+import dateService from "@/services/business/date/FnsDateService";
+import {
+  getCampaignMapFromNames,
+  groupAllCampaignsBasedOnDuration,
+} from "@/services/helpers/campaign-helper";
 
 export default Vue.extend({
   name: "Home",
@@ -27,25 +30,52 @@ export default Vue.extend({
   data() {
     return new (class {
       rangeDates: Array<Date> = [
-        dateService.subDurationOnDate(new Date(), { years: 1 }),
-        new Date(),
+        new Date("2021-01-01"),
+        new Date("2022-01-01"),
       ];
       xAxis: Array<string> = [];
-      yAxis: Array<number> = [];
+      yAxis: Record<string, number[]> = {};
     })();
   },
 
   async mounted() {
-    const campaignResponse =
-      await faceBookCampaignController.getAllCampaignsByRange(
+    const campaigns =
+      await faceBookCampaignController.getAllCampaignsByRangeGroupedByDuration(
         this.rangeDates[0],
-        this.rangeDates[1]
+        this.rangeDates[1],
+        7
       );
 
-    this.xAxis = campaignResponse.data.map((e) => e.campaign_name);
-    this.yAxis = campaignResponse.data
-      .map((e) => e.cpc)
-      .map((e) => parseFloat(e));
+    const allDates = dateService
+      .getAllDatesInRangeForDuration(this.rangeDates[0], this.rangeDates[1], {
+        weeks: 1,
+      })
+      .map((e) => e.toLocaleDateString("en-CA"));
+
+    const groupedCampaigns = groupAllCampaignsBasedOnDuration(campaigns);
+    const campaignNames = Array.from(
+      new Set(campaigns.map((e) => e.campaign_name))
+    );
+    const campaignMapping = getCampaignMapFromNames(campaignNames);
+    //TODO: this code can be simplified on 0 additions
+    for (const date of allDates) {
+      if (groupedCampaigns[date]) {
+        const campaignValues = groupedCampaigns[date];
+        for (const campaign in campaignMapping) {
+          if (campaignValues[campaign]) {
+            campaignMapping[campaign].push(campaignValues[campaign]);
+          } else {
+            campaignMapping[campaign].push(0);
+          }
+        }
+      } else {
+        for (const campaign in campaignMapping) {
+          campaignMapping[campaign].push(0);
+        }
+      }
+    }
+    this.xAxis = allDates;
+    this.yAxis = campaignMapping;
   },
 
   methods: {},
