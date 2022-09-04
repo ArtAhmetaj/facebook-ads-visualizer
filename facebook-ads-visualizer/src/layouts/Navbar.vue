@@ -3,11 +3,7 @@
     <div class="d-flex align-center">
       <v-img
         alt="Causalytics logo"
-        class="shrink mr-2"
-        contain
         src="../assets/images/main-logo.png"
-        height="50"
-
         transition="scale-transition"
       />
     </div>
@@ -15,7 +11,7 @@
     <v-spacer></v-spacer>
 
     <v-btn href="https://causalytics.ai" target="_blank" text>
-      <span class="mr-2">Go to website</span>
+      <span >Go to website</span>
       <v-icon>mdi-open-in-new</v-icon>
     </v-btn>
   </v-app-bar>
