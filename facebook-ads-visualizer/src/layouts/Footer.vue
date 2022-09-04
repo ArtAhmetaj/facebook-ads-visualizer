@@ -7,12 +7,13 @@
         >
 
         <v-spacer></v-spacer>
-
-        <v-btn v-for="icon in this.icons" :key="icon" class="mx-4" dark icon>
-          <v-icon size="24px">
-            {{ icon }}
-          </v-icon>
-        </v-btn>
+        <div v-for="(value, key) in this.icons" :key="key">
+          <v-btn :href="value" target="_blank" class="mx-4" dark icon>
+            <v-icon size="24px">
+              {{ key }}
+            </v-icon>
+          </v-btn>
+        </div>
       </v-card-title>
 
       <v-card-text class="py-2 white--text text-center">
@@ -29,13 +30,15 @@ export default Vue.extend({
   name: "Footer",
   data() {
     return new (class {
-      icons: string[] = [
-        "mdi-facebook",
-        "mdi-twitter",
-        "mdi-linkedin",
-        "mdi-instagram",
-      ];
+      icons: Record<string, string> = {
+        "mdi-facebook": "https://www.facebook.com/causalytics",
+        "mdi-twitter": "https://twitter.com/causalytics?lang=en",
+        "mdi-linkedin":
+          "https://www.linkedin.com/company/causalytics/?originalSubdomain=fi",
+      };
     })();
   },
+
+  methods: {},
 });
 </script>
