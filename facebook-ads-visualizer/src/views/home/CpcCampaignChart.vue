@@ -9,7 +9,7 @@
 import Vue from "vue";
 import LineChart from "@/base-components/charts/line-chart";
 import { ChartData, ChartDataSets } from "chart.js";
-import getRandomColor from "../../../tests/unit/utils/color-utils.unit";
+import getRandomColor from "../../utils/color-utils";
 
 export default Vue.extend({
   name: "CpcCampaignChart",
