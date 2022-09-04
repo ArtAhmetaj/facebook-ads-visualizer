@@ -1,14 +1,12 @@
-// GLOBAL COLORS
-$color-white: #fff;
-$color-body: #1e2221;
-$color-error: red;
+$color-main-blue: #00295b;
+$color-button: #66dba8;
+$color-chart-background: rgb(255, 99, 132, 0.5);
+$color-chart: rgb(255, 99, 132);
 
-$color-cyan: #17ccca;
-$color-line: #eceae8;
-$color-black-transparent: rgba(27, 31, 35, .15);
-
-// fonts color
-$color-font-main: #5a5a5a;
-$color-font-dim: #ccc;
-$color-font-placeholder: #e5e5e5;
+:export {
+ $color-main-blue: color-main-blue;
+  $color-button: color-button;
+  $color-chart-background: color-chart-background;
+  $color-chart: color-chart;
+}
 

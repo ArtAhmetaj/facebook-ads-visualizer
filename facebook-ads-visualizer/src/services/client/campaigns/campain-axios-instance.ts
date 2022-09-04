@@ -2,11 +2,13 @@ import axios, { AxiosRequestConfig } from "axios";
 
 const facebookCampaignInstance = axios.create({
   timeout: 10000,
-  baseURL: "https://graph.facebook.com",
+  baseURL: process.env.VUE_APP_BASE_FACEBOOK_URL,
+  params: {},
 });
 
 facebookCampaignInstance.interceptors.request.use(
-  async (config: AxiosRequestConfig) => {
+  (config: AxiosRequestConfig) => {
+    //TODO: check on why this value is not being sent at times
     config.params["access_token"] = process.env.FACEBOOK_ACCESS_TOKEN;
 
     return config;

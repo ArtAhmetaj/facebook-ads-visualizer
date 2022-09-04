@@ -1,44 +1,71 @@
 <template>
-  <LineChart title-input="CPC on all campaigns per week" :chart-data="this.getChartData"></LineChart>
+  <LineChart
+    :title-input="this.chartTitle"
+    :chart-data="this.chartData"
+  ></LineChart>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import LineChart from "@/base-components/charts/line-chart";
-import { ChartData } from "chart.js";
+import { ChartData, ChartDataSets } from "chart.js";
+import getRandomColor from "../../../tests/unit/utils/color-utils.unit";
 
 export default Vue.extend({
   name: "CpcCampaignChart",
   components: {
-    LineChart
+    LineChart,
   },
 
   props: {
+    dates: {
+      type: Array,
+      required: true,
+    },
     xAxis: {
-      type: Object as () => string[],
-      required: true
+      type: Array,
+      required: true,
     },
     yAxis: {
-      type: Object as () => number[],
-      required: true
-    }
+      type: Object as () => Record<string, number[]>,
+      required: true,
+    },
+  },
+
+  methods: {
+    getMappedChartYAxisFromDate(): ChartDataSets[] {
+      const results = [];
+      for (const campaign in this.yAxis) {
+        const randomColor = getRandomColor();
+        results.push({
+          borderColor: randomColor,
+          borderWidth: 2,
+          pointHoverBackgroundColor: "red",
+          fill: true,
+          label: campaign,
+          data: this.yAxis[campaign],
+        });
+      }
+      return results;
+    },
   },
   computed: {
-    getChartData(): ChartData {
+    chartData(): ChartData {
       return {
-        labels: this.xAxis,
+        labels: (this.xAxis as string[]).map((v, i) => `${i + 1}W`),
 
-        datasets: [
-          {
-            fill: false,
-            label: "",
-            borderColor: "red",
-            data: this.yAxis
-          }
-        ]
+        datasets: this.getMappedChartYAxisFromDate(),
       };
-    }
-  }
+    },
+
+    chartTitle(): string {
+      //TODO: can create a seperate model here
+      const dates = this.dates as Array<Date>;
+      return `Campaign statistics from ${dates[0].toLocaleDateString(
+        this.$i18n.locale
+      )} to ${dates[1].toLocaleDateString(this.$i18n.locale)}`;
+    },
+  },
 });
 </script>
 

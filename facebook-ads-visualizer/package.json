@@ -13,11 +13,12 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "chart.js": "^2.7.1",
     "core-js": "^3.6.5",
     "date-fns": "^2.29.2",
     "ts-mocha": "^10.0.0",
+    "vee-validate": "^4.6.7",
     "vue": "^2.6.11",
-    "chart.js": "^2.7.1",
     "vue-chartjs": "^3.4.0",
     "vue-i18n": "^8.26.3",
     "vue-router": "^3.2.0",
