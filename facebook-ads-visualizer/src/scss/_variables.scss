@@ -1,0 +1,12 @@
+$color-main-blue: #00295b;
+$color-button: #66dba8;
+$color-chart-background: rgb(255, 99, 132, 0.5);
+$color-chart: rgb(255, 99, 132);
+
+:export {
+ $color-main-blue: color-main-blue;
+  $color-button: color-button;
+  $color-chart-background: color-chart-background;
+  $color-chart: color-chart;
+}
+

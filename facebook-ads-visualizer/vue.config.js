@@ -1,6 +1,6 @@
 module.exports = {
   transpileDependencies: ["vuetify"],
-
+  productionSourceMap: false, // Previously it was set as true
   pluginOptions: {
     i18n: {
       locale: "en",

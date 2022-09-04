@@ -21,7 +21,8 @@ module.exports = {
     {
       files: [
         "**/__tests__/*.{j,t}s?(x)",
-        "**/tests/unit/**/*.spec.{j,t}s?(x)",
+        "**/tests/unit/**/*.unit.{j,t}s",
+        "**/tests/component/**/*.spec.{j,t}s?(x)",
       ],
       env: {
         mocha: true,
