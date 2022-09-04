@@ -9,7 +9,7 @@ const facebookCampaignInstance = axios.create({
 facebookCampaignInstance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     //TODO: check on why this value is not being sent at times
-    config.params["access_token"] = process.env.FACEBOOK_ACCESS_TOKEN;
+    config.params["access_token"] = process.env.VUE_APP_FACEBOOK_ACCESS_TOKEN;
 
     return config;
   },
