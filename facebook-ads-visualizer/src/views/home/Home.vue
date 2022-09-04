@@ -57,28 +57,21 @@ export default Vue.extend({
       new Set(campaigns.map((e) => e.campaign_name))
     );
     const campaignMapping = getCampaignMapFromNames(campaignNames);
-    //TODO: this code can be simplified on 0 additions
+    //TODO: offload this to chart itself to deal missing cartesian values
     for (const date of allDates) {
-      if (groupedCampaigns[date]) {
-        const campaignValues = groupedCampaigns[date];
-        for (const campaign in campaignMapping) {
-          if (campaignValues[campaign]) {
-            campaignMapping[campaign].push(campaignValues[campaign]);
-          } else {
-            campaignMapping[campaign].push(0);
-          }
-        }
-      } else {
-        for (const campaign in campaignMapping) {
-          campaignMapping[campaign].push(0);
-        }
+      const campaignValues = groupedCampaigns[date];
+      for (const campaign in campaignMapping) {
+        campaignMapping[campaign].push(
+          campaignValues && campaignValues[campaign]
+            ? campaignValues[campaign]
+            : 0
+        );
       }
     }
     this.xAxis = allDates;
     this.yAxis = campaignMapping;
   },
 
-  methods: {},
 });
 </script>
 
